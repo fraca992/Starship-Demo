@@ -14,6 +14,7 @@ public class ColisionHandler : MonoBehaviour
                 break;
             case "Finish":
                 Debug.Log("Level Completed!");
+                LoadNextLevel();
                 break;
             default:
                 Debug.Log("BOOM");
@@ -38,5 +39,11 @@ public class ColisionHandler : MonoBehaviour
     {
         int currentLvlIndex = SceneManager.GetActiveScene().buildIndex;
         SceneManager.LoadScene(currentLvlIndex);
+    }
+
+    private void LoadNextLevel()
+    {
+        int nextLvlIndex = SceneManager.GetActiveScene().buildIndex + 1;
+        if (nextLvlIndex < SceneManager.sceneCountInBuildSettings) SceneManager.LoadScene(nextLvlIndex);
     }
 }
