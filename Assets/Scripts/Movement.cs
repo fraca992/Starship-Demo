@@ -1,24 +1,21 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class Movement : MonoBehaviour
 {
     Rigidbody rb;
+    AudioSource thrusterSoundSource;
     [SerializeField] private float thrust = 1000f;
     [SerializeField] private float torque = 350f;
     [SerializeField] private float correctionTorque = 130f;
     [SerializeField] private float torqueHeight = 4f;
 
-    // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody>();
+        thrusterSoundSource = GetComponent<AudioSource>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         ProcessThrust();
@@ -38,6 +35,11 @@ public class Movement : MonoBehaviour
         if (Input.GetKey(KeyCode.Space))
         {
             rb.AddRelativeForce(thrust * Vector3.up * Time.deltaTime);
+            if (!thrusterSoundSource.isPlaying) thrusterSoundSource.Play();
+        }
+        else
+        {
+            thrusterSoundSource.Stop();
         }
     }
 
