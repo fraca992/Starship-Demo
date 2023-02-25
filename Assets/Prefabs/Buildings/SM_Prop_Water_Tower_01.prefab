@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 141082939}
   - component: {fileID: 718612207}
   - component: {fileID: 6951102236039488941}
+  - component: {fileID: 6906697874394120975}
   m_Layer: 0
   m_Name: SM_Prop_Water_Tower_01
   m_TagString: Untagged
@@ -241,6 +242,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1bfc7d7c2860ba44fb17682b7fe07e0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canMove: 1
   thrust: 1000
   torque: 350
   correctionTorque: 130
@@ -257,3 +259,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fa9aeacb99972641a394d5d6f4f6f47, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  delay: 5
+  hitFuelDrain: 20
+  fuelRechargeAmount: 40
+--- !u!114 &6906697874394120975
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 198202}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5be7fce59130d414f9b6496b1218857e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fuelDrainPerSecond: 2
+  delay: 5
