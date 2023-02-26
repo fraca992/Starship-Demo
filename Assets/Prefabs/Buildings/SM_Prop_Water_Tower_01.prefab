@@ -276,3 +276,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fuelDrainPerSecond: 2
   delay: 5
+  fuelBar: {fileID: 0}

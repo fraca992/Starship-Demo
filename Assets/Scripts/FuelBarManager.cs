@@ -3,9 +3,9 @@ using UnityEngine.UI;
 
 public class FuelBarManager : MonoBehaviour
 {
-    [SerializeField] private Slider fuelSlider;
+    private Slider fuelSlider;
 
-    private void Start()
+    private void Awake()
     {
         fuelSlider = this.GetComponent<Slider>();
     }
@@ -17,5 +17,6 @@ public class FuelBarManager : MonoBehaviour
     public void SetBarMax(int maxLvl)
     {
         fuelSlider.maxValue = maxLvl;
+        fuelSlider.value = maxLvl;
     }
 }

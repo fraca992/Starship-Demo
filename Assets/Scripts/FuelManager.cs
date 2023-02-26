@@ -24,7 +24,7 @@ public class FuelManager : MonoBehaviour
     // metti coroutine per fuel drain & explosion
     public int ChangeFuelLevel(int amount)
     {
-        if (amount == 0) amount = fuelDrainPerSecond;
+        if (amount == 0) amount = -fuelDrainPerSecond;
 
         FuelLevel += amount;
         fuelBarManager.SetFuelLvl(FuelLevel);
