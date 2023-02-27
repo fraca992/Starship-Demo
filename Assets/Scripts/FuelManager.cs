@@ -4,14 +4,26 @@ using UnityEngine.SceneManagement;
 
 public class FuelManager : MonoBehaviour
 {
+    #region VARIABLES
+    // Parameters
     private int _fuelLevel;
-    public int FuelLevel { get { return _fuelLevel; } private set { _fuelLevel = Mathf.Clamp(value,0,MaxFuel); } }
+    public int FuelLevel { get { return _fuelLevel; } private set { _fuelLevel = Mathf.Clamp(value, 0, MaxFuel); } }
     public int MaxFuel { get; private set; } = 100;
     [SerializeField] private int fuelDrainPerSecond = 2;
     [SerializeField] private float delay = 5.0f;
+    // Caches
     [SerializeField] private GameObject fuelBar;
     private FuelBarManager fuelBarManager;
     private Movement rocketMovement;
+    private AudioSource secondaryAudioSource;
+    [SerializeField] private AudioClip destroiedAudioClip;
+
+    // State variables
+    private bool isDestroyed;
+    #endregion
+
+
+
 
     private void Start()
     {
@@ -19,19 +31,27 @@ public class FuelManager : MonoBehaviour
         fuelBarManager = fuelBar.GetComponent<FuelBarManager>();
         fuelBarManager.SetBarMax(MaxFuel);
         rocketMovement = this.GetComponent<Movement>();
+        secondaryAudioSource = this.GetComponents<AudioSource>()[1];
+
+        isDestroyed = false;
     }
 
-    // metti coroutine per fuel drain & explosion
+    #region METHODS
     public int ChangeFuelLevel(int amount)
     {
-        if (amount == 0) amount = -fuelDrainPerSecond;
-
-        FuelLevel += amount;
-        fuelBarManager.SetFuelLvl(FuelLevel);
-
+        if (!isDestroyed)
+        {
+            if (amount == 0) amount = -fuelDrainPerSecond;
+            FuelLevel += amount;
+            fuelBarManager.SetFuelLvl(FuelLevel);
+        }
         if (FuelLevel <= 0)
         {
-            //TODO insert sound, effects etc. for explosion
+            if (!isDestroyed)
+            {
+                secondaryAudioSource.PlayOneShot(destroiedAudioClip);
+                isDestroyed = true;
+            }
             ReloadLevel();
         }
         return FuelLevel;
@@ -50,4 +70,5 @@ public class FuelManager : MonoBehaviour
         SceneManager.LoadScene(index);
         rocketMovement.canMove = true;
     }
+    #endregion
 }

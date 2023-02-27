@@ -4,21 +4,29 @@ using UnityEngine;
 
 public class Movement : MonoBehaviour
 {
-    public bool canMove = true;
-    private bool hasMoved = false;
-    private IEnumerator fuelDrainCR;
-    private Rigidbody rb;
-    private AudioSource thrusterSoundSource;
-    private FuelManager rocketFuelManager;
+    #region VARIABLES
+    // Parameters
     [SerializeField] private float thrust = 1000f;
     [SerializeField] private float torque = 350f;
     [SerializeField] private float correctionTorque = 130f;
     [SerializeField] private float torqueHeight = 4f;
 
+    // Caches
+    private Rigidbody rb;
+    private AudioSource rocketAudioSource;
+    private FuelManager rocketFuelManager;
+    [SerializeField] private AudioClip mainEngineAudioClip;
+    private IEnumerator fuelDrainCR;
+
+    // State variables
+    public bool canMove = true;
+    private bool hasMoved = false;
+    #endregion
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        thrusterSoundSource = GetComponent<AudioSource>();
+        rocketAudioSource = GetComponents<AudioSource>()[0];
         rocketFuelManager = GetComponent<FuelManager>();
         fuelDrainCR = FuelDrain();
     }
@@ -30,7 +38,7 @@ public class Movement : MonoBehaviour
     }
     void LateUpdate()
     {
-            EnforceConstraints();
+        EnforceConstraints();
     }
 
     #region METHODS
@@ -39,16 +47,15 @@ public class Movement : MonoBehaviour
         if (Input.GetKey(KeyCode.Space) && canMove)
         {
             rb.AddRelativeForce(thrust * Vector3.up * Time.deltaTime);
-            if (!thrusterSoundSource.isPlaying) thrusterSoundSource.Play();
+            if (!rocketAudioSource.isPlaying) rocketAudioSource.PlayOneShot(mainEngineAudioClip);
             if (!hasMoved) StartFuelDrain();
         }
         else
         {
-            thrusterSoundSource.Stop();
+            rocketAudioSource.Stop();
         }
         if (hasMoved && !canMove) StopCoroutine(fuelDrainCR);
     }
-
 
     private void ProcessRotation()
     {
@@ -89,7 +96,6 @@ public class Movement : MonoBehaviour
         rb.AddForceAtPosition(torq * rb.transform.right * Time.deltaTime, rotationPoint);
         if (!hasMoved) StartFuelDrain();
     }
-
 
     private void EnforceConstraints()
     {
