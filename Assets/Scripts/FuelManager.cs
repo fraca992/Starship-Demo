@@ -19,11 +19,8 @@ public class FuelManager : MonoBehaviour
     [SerializeField] private AudioClip destroiedAudioClip;
 
     // State variables
-    private bool isDestroyed;
+    public bool isDestroyed;
     #endregion
-
-
-
 
     private void Start()
     {

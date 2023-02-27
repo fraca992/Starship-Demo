@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -18,7 +19,7 @@ public class CollisionHandler : MonoBehaviour
     [SerializeField] private AudioClip successAudioClip;
 
     // State variables
-
+    private bool isTransitioning;
     #endregion
 
     private void Start()
@@ -26,48 +27,79 @@ public class CollisionHandler : MonoBehaviour
         rocketFuelManager = this.GetComponent<FuelManager>();
         rocketMovement = this.GetComponent<Movement>();
         secondaryAudioSource = this.GetComponents<AudioSource>()[1];
+
+        isTransitioning = false;
     }
+
     #region COLLISIONS&TRIGGERS
     private void OnCollisionEnter(Collision collision)
     {
+        if (isTransitioning) return;
+
         switch (collision.gameObject.tag)
         {
             case "Friendly":
                 break;
             case "Obstacle":
-                if (!secondaryAudioSource.isPlaying) secondaryAudioSource.PlayOneShot(crashAudioClip);
-                rocketFuelManager.ChangeFuelLevel(-hitFuelDrain);
+                ProcessHit();
                 break;
             case "Finish":
-                if (!secondaryAudioSource.isPlaying) secondaryAudioSource.PlayOneShot(successAudioClip);
                 LoadNextLevel();
                 break;
-            default: // In default case (i.e. hitting terrain), we want to destroy the rocket
-                rocketFuelManager.ChangeFuelLevel(-rocketFuelManager.MaxFuel);
+            default:
+                DestroyRocket();
                 break;
         }
     }
 
     private void OnTriggerEnter(Collider other)
     {
+        if (isTransitioning || rocketFuelManager.isDestroyed) return;
+
         switch(other.gameObject.tag)
         {
             case "Fuel":
-                rocketFuelManager.ChangeFuelLevel(fuelRechargeAmount);
+                ProcessFuel();
                 GameObject.Destroy(other.gameObject);
                 break;
             default:
                 break;
         }
     }
+
+    private void ProcessFuel()
+    {
+        isTransitioning = true;
+        rocketFuelManager.ChangeFuelLevel(fuelRechargeAmount);
+        
+        isTransitioning = false;
+    }
     #endregion
 
     #region METHODS
+    private void ProcessHit()
+    {
+        isTransitioning = true;
+        if (!secondaryAudioSource.isPlaying) secondaryAudioSource.PlayOneShot(crashAudioClip);
+        rocketFuelManager.ChangeFuelLevel(-hitFuelDrain);
+        isTransitioning = false;
+    }
+
     private void LoadNextLevel()
     {
+        isTransitioning = true;
+        if (!secondaryAudioSource.isPlaying) secondaryAudioSource.PlayOneShot(successAudioClip);
         int nextLvlIndex = SceneManager.GetActiveScene().buildIndex + 1;
         if (nextLvlIndex >= SceneManager.sceneCountInBuildSettings) nextLvlIndex = 0;
         StartCoroutine(LoadLvlAfterDelay(delay, nextLvlIndex));
+        isTransitioning = false;
+    }
+
+    private void DestroyRocket()
+    {
+        isTransitioning = true;
+        rocketFuelManager.ChangeFuelLevel(-rocketFuelManager.MaxFuel);
+        isTransitioning = false;
     }
 
     IEnumerator LoadLvlAfterDelay(float amount, int index)
