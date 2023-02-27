@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class ColisionHandler : MonoBehaviour
+public class CollisionHandler : MonoBehaviour
 {
     [SerializeField] private float delay = 5.0f;
     [SerializeField] private int hitFuelDrain = 20;
@@ -27,7 +27,7 @@ public class ColisionHandler : MonoBehaviour
                 break;
             case "Finish":
                 //TODO insert sound, effects etc. for winning
-                LoadNextLevel();              
+                LoadNextLevel();
                 break;
             default: // In default case (i.e. hitting terrain), we want to destroy the rocket
                 rocketFuelManager.ChangeFuelLevel(-rocketFuelManager.MaxFuel);
@@ -41,6 +41,7 @@ public class ColisionHandler : MonoBehaviour
         {
             case "Fuel":
                 rocketFuelManager.ChangeFuelLevel(fuelRechargeAmount);
+                GameObject.Destroy(other.gameObject);
                 break;
             default:
                 break;
@@ -59,6 +60,10 @@ public class ColisionHandler : MonoBehaviour
     {
         rocketMovement.canMove = false;
         yield return new WaitForSeconds(amount);
+        if (rocketFuelManager.FuelLevel == 0)
+        {
+            index = SceneManager.GetActiveScene().buildIndex;
+        }
         SceneManager.LoadScene(index);
         rocketMovement.canMove = true;
     }

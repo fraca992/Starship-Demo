@@ -6,6 +6,7 @@ public class Movement : MonoBehaviour
 {
     public bool canMove = true;
     private bool hasMoved = false;
+    private IEnumerator fuelDrainCR;
     private Rigidbody rb;
     private AudioSource thrusterSoundSource;
     private FuelManager rocketFuelManager;
@@ -19,6 +20,7 @@ public class Movement : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         thrusterSoundSource = GetComponent<AudioSource>();
         rocketFuelManager = GetComponent<FuelManager>();
+        fuelDrainCR = FuelDrain();
     }
 
     void Update()
@@ -28,10 +30,7 @@ public class Movement : MonoBehaviour
     }
     void LateUpdate()
     {
-        if (canMove)
-        {
             EnforceConstraints();
-        }
     }
 
     #region METHODS
@@ -47,6 +46,7 @@ public class Movement : MonoBehaviour
         {
             thrusterSoundSource.Stop();
         }
+        if (hasMoved && !canMove) StopCoroutine(fuelDrainCR);
     }
 
 
@@ -60,10 +60,15 @@ public class Movement : MonoBehaviour
         {
             ApplyRotation(torque);
         }
-        else
+        else if (canMove)
         {
             SlowDownRotation();
         }
+        //else
+        //{
+        //    //put stopping sound logic here
+        //}
+        if (hasMoved && !canMove) StopCoroutine(fuelDrainCR);
     }
     private void SlowDownRotation()
     {
@@ -73,7 +78,7 @@ public class Movement : MonoBehaviour
         {
             ApplyRotation(slowingTorque);
         }
-        else if (rb.angularVelocity.z > 0.01)
+        else if (MathF.Abs(rb.angularVelocity.z) > 0.01)
         {
             rb.angularVelocity = new Vector3(0, 0, 0);
         }
@@ -88,6 +93,8 @@ public class Movement : MonoBehaviour
 
     private void EnforceConstraints()
     {
+        if (!canMove) return;
+
         rb.transform.localEulerAngles = new Vector3(0, 0, rb.transform.localEulerAngles.z);
         rb.transform.localPosition = new Vector3(rb.transform.localPosition.x, rb.transform.localPosition.y, 0);
     }
@@ -95,7 +102,7 @@ public class Movement : MonoBehaviour
     private void StartFuelDrain()
     {
         hasMoved = true;
-        StartCoroutine(FuelDrain());
+        StartCoroutine(fuelDrainCR);
     }
     IEnumerator FuelDrain()
     {
