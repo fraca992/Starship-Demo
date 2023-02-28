@@ -10,17 +10,20 @@ public class Movement : MonoBehaviour
     [SerializeField] private float torque = 350f;
     [SerializeField] private float correctionTorque = 130f;
     [SerializeField] private float torqueHeight = 4f;
+    [SerializeField] private AudioClip mainEngineAudioClip;
 
     // Caches
     private Rigidbody rb;
     private AudioSource rocketAudioSource;
     private FuelManager rocketFuelManager;
-    [SerializeField] private AudioClip mainEngineAudioClip;
-    private IEnumerator fuelDrainCR;
+    [SerializeField] private ParticleSystem mainThruster;
+    [SerializeField] private ParticleSystem leftThruster;
+    [SerializeField] private ParticleSystem rightThruster;
 
     // State variables
     public bool canMove = true;
     private bool hasMoved = false;
+    private IEnumerator fuelDrainCR;
     #endregion
 
     void Start()
@@ -49,10 +52,12 @@ public class Movement : MonoBehaviour
             rb.AddRelativeForce(thrust * Vector3.up * Time.deltaTime);
             if (!rocketAudioSource.isPlaying) rocketAudioSource.PlayOneShot(mainEngineAudioClip);
             if (!hasMoved) StartFuelDrain();
+            if (!mainThruster.isEmitting) mainThruster.Play();
         }
         else
         {
             rocketAudioSource.Stop();
+            mainThruster.Stop();
         }
         if (hasMoved && !canMove) StopCoroutine(fuelDrainCR);
     }
@@ -62,19 +67,24 @@ public class Movement : MonoBehaviour
         if (Input.GetKey(KeyCode.A) && canMove)
         {
             ApplyRotation(-torque);
+            if (!rightThruster.isEmitting) rightThruster.Play();
         }
         else if (Input.GetKey(KeyCode.D) && canMove)
         {
             ApplyRotation(torque);
+            if (!leftThruster.isEmitting) leftThruster.Play();
         }
         else if (canMove)
         {
             SlowDownRotation();
+            leftThruster.Stop();
+            rightThruster.Stop();
         }
-        //else
-        //{
-        //    //put stopping sound logic here
-        //}
+        else
+        {
+            leftThruster.Stop();
+            rightThruster.Stop();
+        }
         if (hasMoved && !canMove) StopCoroutine(fuelDrainCR);
     }
     private void SlowDownRotation()
