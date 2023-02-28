@@ -10,13 +10,14 @@ public class CollisionHandler : MonoBehaviour
     [SerializeField] private float delay = 5.0f;
     [SerializeField] private int hitFuelDrain = 20;
     [SerializeField] private int fuelRechargeAmount = 40;
+    [SerializeField] private AudioClip hitAudioClip;
+    [SerializeField] private AudioClip successAudioClip;
+    [SerializeField] private ParticleSystem successParticles;
 
     // Caches
     private FuelManager rocketFuelManager;
     private Movement rocketMovement;
     private AudioSource secondaryAudioSource;
-    [SerializeField] private AudioClip crashAudioClip;
-    [SerializeField] private AudioClip successAudioClip;
 
     // State variables
     private bool isTransitioning;
@@ -80,7 +81,7 @@ public class CollisionHandler : MonoBehaviour
     private void ProcessHit()
     {
         isTransitioning = true;
-        if (!secondaryAudioSource.isPlaying) secondaryAudioSource.PlayOneShot(crashAudioClip);
+        if (!secondaryAudioSource.isPlaying) secondaryAudioSource.PlayOneShot(hitAudioClip);
         rocketFuelManager.ChangeFuelLevel(-hitFuelDrain);
         isTransitioning = false;
     }
@@ -89,6 +90,7 @@ public class CollisionHandler : MonoBehaviour
     {
         isTransitioning = true;
         if (!secondaryAudioSource.isPlaying) secondaryAudioSource.PlayOneShot(successAudioClip);
+        successParticles.Play();
         int nextLvlIndex = SceneManager.GetActiveScene().buildIndex + 1;
         if (nextLvlIndex >= SceneManager.sceneCountInBuildSettings) nextLvlIndex = 0;
         StartCoroutine(LoadLvlAfterDelay(delay, nextLvlIndex));

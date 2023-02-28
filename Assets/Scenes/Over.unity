@@ -371,6 +371,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 412702, guid: 7b30b5ba44201104fba4e71a527b6905, type: 3}
   m_PrefabInstance: {fileID: 82782887}
   m_PrefabAsset: {fileID: 0}
+--- !u!198 &90530916 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 7430630007622270377, guid: b1c9a178d3040a14aac77ac6bcbcc9bd, type: 3}
+  m_PrefabInstance: {fileID: 718612204}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &105610432
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2365,6 +2370,22 @@ PrefabInstance:
       propertyPath: fuelBar
       value: 
       objectReference: {fileID: 1813019134}
+    - target: {fileID: 6906697874394120975, guid: b1c9a178d3040a14aac77ac6bcbcc9bd, type: 3}
+      propertyPath: crashParticles
+      value: 
+      objectReference: {fileID: 1260489965}
+    - target: {fileID: 6951102236039488941, guid: b1c9a178d3040a14aac77ac6bcbcc9bd, type: 3}
+      propertyPath: hitAudioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 7db5136d80638014688fe16d76a9a014, type: 3}
+    - target: {fileID: 6951102236039488941, guid: b1c9a178d3040a14aac77ac6bcbcc9bd, type: 3}
+      propertyPath: crashParticles
+      value: 
+      objectReference: {fileID: 1260489965}
+    - target: {fileID: 6951102236039488941, guid: b1c9a178d3040a14aac77ac6bcbcc9bd, type: 3}
+      propertyPath: successParticles
+      value: 
+      objectReference: {fileID: 90530916}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b1c9a178d3040a14aac77ac6bcbcc9bd, type: 3}
 --- !u!1001 &721273893
@@ -3831,6 +3852,11 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 412702, guid: 7b30b5ba44201104fba4e71a527b6905, type: 3}
   m_PrefabInstance: {fileID: 1256936700}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &1260489965 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 8517193085298762217, guid: b1c9a178d3040a14aac77ac6bcbcc9bd, type: 3}
+  m_PrefabInstance: {fileID: 718612204}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1270111136
 PrefabInstance:

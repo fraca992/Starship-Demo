@@ -11,12 +11,16 @@ public class FuelManager : MonoBehaviour
     public int MaxFuel { get; private set; } = 100;
     [SerializeField] private int fuelDrainPerSecond = 2;
     [SerializeField] private float delay = 5.0f;
-    // Caches
     [SerializeField] private GameObject fuelBar;
+    [SerializeField] private AudioClip destroiedAudioClip;
+    [SerializeField] private ParticleSystem crashParticles;
+
+    // Caches
+
     private FuelBarManager fuelBarManager;
     private Movement rocketMovement;
     private AudioSource secondaryAudioSource;
-    [SerializeField] private AudioClip destroiedAudioClip;
+    
 
     // State variables
     public bool isDestroyed;
@@ -47,6 +51,7 @@ public class FuelManager : MonoBehaviour
             if (!isDestroyed)
             {
                 secondaryAudioSource.PlayOneShot(destroiedAudioClip);
+                crashParticles.Play();
                 isDestroyed = true;
             }
             ReloadLevel();
