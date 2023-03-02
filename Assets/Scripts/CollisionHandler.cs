@@ -21,6 +21,7 @@ public class CollisionHandler : MonoBehaviour
 
     // State variables
     private bool isTransitioning;
+    public bool isEnabled;
     #endregion
 
     private void Start()
@@ -30,12 +31,14 @@ public class CollisionHandler : MonoBehaviour
         secondaryAudioSource = this.GetComponents<AudioSource>()[1];
 
         isTransitioning = false;
+        isEnabled = true;
     }
 
     #region COLLISIONS&TRIGGERS
     private void OnCollisionEnter(Collision collision)
     {
-        if (isTransitioning) return;
+        if (isTransitioning || !isEnabled) return;
+
 
         switch (collision.gameObject.tag)
         {
@@ -55,7 +58,7 @@ public class CollisionHandler : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (isTransitioning || rocketFuelManager.isDestroyed) return;
+        if (isTransitioning || rocketFuelManager.isDestroyed || !isEnabled) return;
 
         switch(other.gameObject.tag)
         {

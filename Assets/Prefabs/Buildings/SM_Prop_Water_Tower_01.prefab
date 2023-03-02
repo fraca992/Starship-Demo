@@ -19,6 +19,7 @@ GameObject:
   - component: {fileID: 718612207}
   - component: {fileID: 6951102236039488941}
   - component: {fileID: 6906697874394120975}
+  - component: {fileID: 120007853572452183}
   m_Layer: 0
   m_Name: SM_Prop_Water_Tower_01
   m_TagString: Untagged
@@ -373,6 +374,7 @@ MonoBehaviour:
   hitAudioClip: {fileID: 8300000, guid: 7db5136d80638014688fe16d76a9a014, type: 3}
   successAudioClip: {fileID: 8300000, guid: 3e6af750de97efa47bdb1aaa0723997d, type: 3}
   successParticles: {fileID: 7430630007622270377}
+  isEnabled: 0
 --- !u!114 &6906697874394120975
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -391,6 +393,19 @@ MonoBehaviour:
   destroiedAudioClip: {fileID: 8300000, guid: 55b77d15a1c242a4d9b5e16053864279, type: 3}
   crashParticles: {fileID: 8517193085298762217}
   isDestroyed: 0
+  isEnabled: 0
+--- !u!114 &120007853572452183
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 198202}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fdd94f9f9af0bb64f9e6b31b76a468da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2626176729248878179
 GameObject:
   m_ObjectHideFlags: 0

@@ -22,6 +22,7 @@ public class FuelManager : MonoBehaviour
 
     // State variables
     public bool isDestroyed;
+    public bool isEnabled;
     #endregion
 
     private void Start()
@@ -33,11 +34,14 @@ public class FuelManager : MonoBehaviour
         secondaryAudioSource = this.GetComponents<AudioSource>()[1];
 
         isDestroyed = false;
+        isEnabled = true;
     }
 
     #region METHODS
     public int ChangeFuelLevel(int amount)
     {
+        if (!isEnabled) return FuelLevel;
+
         if (!isDestroyed)
         {
             if (amount == 0) amount = -fuelDrainPerSecond;
@@ -57,7 +61,7 @@ public class FuelManager : MonoBehaviour
         return FuelLevel;
     }
 
-    private void ReloadLevel()
+    public void ReloadLevel()
     {
         int currentLvlIndex = SceneManager.GetActiveScene().buildIndex;     
         StartCoroutine(LoadLevelUtils.LoadLvlAfterDelay(delay,currentLvlIndex,rocketMovement,this.GetComponent<FuelManager>()));
