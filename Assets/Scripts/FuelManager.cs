@@ -16,11 +16,9 @@ public class FuelManager : MonoBehaviour
     [SerializeField] private ParticleSystem crashParticles;
 
     // Caches
-
     private FuelBarManager fuelBarManager;
     private Movement rocketMovement;
     private AudioSource secondaryAudioSource;
-    
 
     // State variables
     public bool isDestroyed;
@@ -62,15 +60,9 @@ public class FuelManager : MonoBehaviour
     private void ReloadLevel()
     {
         int currentLvlIndex = SceneManager.GetActiveScene().buildIndex;     
-        StartCoroutine(LoadLvlAfterDelay(delay,currentLvlIndex));
+        StartCoroutine(LoadLevelUtils.LoadLvlAfterDelay(delay,currentLvlIndex,rocketMovement,this.GetComponent<FuelManager>()));
     }
 
-    IEnumerator LoadLvlAfterDelay(float amount,int index)
-    {
-        rocketMovement.canMove = false;
-        yield return new WaitForSeconds(amount);
-        SceneManager.LoadScene(index);
-        rocketMovement.canMove = true;
-    }
+
     #endregion
 }

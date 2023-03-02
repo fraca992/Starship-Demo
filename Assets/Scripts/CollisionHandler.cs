@@ -86,17 +86,6 @@ public class CollisionHandler : MonoBehaviour
         isTransitioning = false;
     }
 
-    private void LoadNextLevel()
-    {
-        isTransitioning = true;
-        if (!secondaryAudioSource.isPlaying) secondaryAudioSource.PlayOneShot(successAudioClip);
-        successParticles.Play();
-        int nextLvlIndex = SceneManager.GetActiveScene().buildIndex + 1;
-        if (nextLvlIndex >= SceneManager.sceneCountInBuildSettings) nextLvlIndex = 0;
-        StartCoroutine(LoadLvlAfterDelay(delay, nextLvlIndex));
-        isTransitioning = false;
-    }
-
     private void DestroyRocket()
     {
         isTransitioning = true;
@@ -104,16 +93,15 @@ public class CollisionHandler : MonoBehaviour
         isTransitioning = false;
     }
 
-    IEnumerator LoadLvlAfterDelay(float amount, int index)
+    public void LoadNextLevel()
     {
-        rocketMovement.canMove = false;
-        yield return new WaitForSeconds(amount);
-        if (rocketFuelManager.FuelLevel == 0)
-        {
-            index = SceneManager.GetActiveScene().buildIndex;
-        }
-        SceneManager.LoadScene(index);
-        rocketMovement.canMove = true;
+        isTransitioning = true;
+        if (!secondaryAudioSource.isPlaying) secondaryAudioSource.PlayOneShot(successAudioClip);
+        successParticles.Play();
+        int nextLvlIndex = SceneManager.GetActiveScene().buildIndex + 1;
+        if (nextLvlIndex >= SceneManager.sceneCountInBuildSettings) nextLvlIndex = 0;
+        StartCoroutine(LoadLevelUtils.LoadLvlAfterDelay(delay, nextLvlIndex,rocketMovement,rocketFuelManager));
+        isTransitioning = false;
     }
     #endregion
 }
