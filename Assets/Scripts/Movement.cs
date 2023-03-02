@@ -49,62 +49,90 @@ public class Movement : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.Space) && canMove)
         {
+            StartThrusting();
+        }
+        else
+        {
+            StopThrusting();
+        }
+        if (hasMoved && !canMove) StopCoroutine(fuelDrainCR);
+
+        void StartThrusting()
+        {
             rb.AddRelativeForce(thrust * Vector3.up * Time.deltaTime);
             if (!rocketAudioSource.isPlaying) rocketAudioSource.PlayOneShot(mainEngineAudioClip);
             if (!hasMoved) StartFuelDrain();
             if (!mainThruster.isEmitting) mainThruster.Play();
         }
-        else
+
+        void StopThrusting()
         {
             rocketAudioSource.Stop();
             mainThruster.Stop();
         }
-        if (hasMoved && !canMove) StopCoroutine(fuelDrainCR);
     }
 
     private void ProcessRotation()
     {
         if (Input.GetKey(KeyCode.A) && canMove)
         {
-            ApplyRotation(-torque);
-            if (!rightThruster.isEmitting) rightThruster.Play();
+            RotateLeft();
         }
         else if (Input.GetKey(KeyCode.D) && canMove)
         {
-            ApplyRotation(torque);
-            if (!leftThruster.isEmitting) leftThruster.Play();
+            RotateRight();
         }
         else if (canMove)
         {
             SlowDownRotation();
-            leftThruster.Stop();
-            rightThruster.Stop();
+            
         }
         else
         {
+            StopRotation();
+        }
+        if (hasMoved && !canMove) StopCoroutine(fuelDrainCR);
+
+        void ApplyRotation(float torq)
+        {
+            Vector3 rotationPoint = rb.transform.localPosition + rb.transform.up * torqueHeight;
+            rb.AddForceAtPosition(torq * rb.transform.right * Time.deltaTime, rotationPoint);
+            if (!hasMoved) StartFuelDrain();
+        }
+
+        void RotateLeft()
+        {
+            ApplyRotation(-torque);
+            if (!rightThruster.isEmitting) rightThruster.Play();
+        }
+
+        void RotateRight()
+        {
+            ApplyRotation(torque);
+            if (!leftThruster.isEmitting) leftThruster.Play();
+        }
+
+        void SlowDownRotation()
+        {
+            float slowingTorque = correctionTorque * rb.angularVelocity.z;
+
+            if (MathF.Abs(rb.angularVelocity.z) > 0.1)
+            {
+                ApplyRotation(slowingTorque);
+            }
+            else if (MathF.Abs(rb.angularVelocity.z) > 0.01)
+            {
+                rb.angularVelocity = new Vector3(0, 0, 0);
+            }
             leftThruster.Stop();
             rightThruster.Stop();
         }
-        if (hasMoved && !canMove) StopCoroutine(fuelDrainCR);
-    }
-    private void SlowDownRotation()
-    {
-        float slowingTorque = correctionTorque * rb.angularVelocity.z;
 
-        if (MathF.Abs(rb.angularVelocity.z) > 0.1)
+        void StopRotation()
         {
-            ApplyRotation(slowingTorque);
+            leftThruster.Stop();
+            rightThruster.Stop();
         }
-        else if (MathF.Abs(rb.angularVelocity.z) > 0.01)
-        {
-            rb.angularVelocity = new Vector3(0, 0, 0);
-        }
-    }
-    private void ApplyRotation(float torq)
-    {
-        Vector3 rotationPoint = rb.transform.localPosition + rb.transform.up * torqueHeight;
-        rb.AddForceAtPosition(torq * rb.transform.right * Time.deltaTime, rotationPoint);
-        if (!hasMoved) StartFuelDrain();
     }
 
     private void EnforceConstraints()
