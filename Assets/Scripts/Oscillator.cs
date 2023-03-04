@@ -24,9 +24,16 @@ public class Oscillator : MonoBehaviour
 
     void Update()
     {
+        // to avoid divide by zero errors, we just turn off oscillating
+        if (Mathf.Abs(period) <= Mathf.Epsilon) return;
+        Oscillate();
+    }
+
+    private void Oscillate()
+    {
         const float tau = Mathf.PI * 2;
 
-        float cycles = Time.time / period;        
+        float cycles = Time.time / period;
         float rawSignWave = Mathf.Sin(cycles * tau);
 
         // goes from 0 to 1 following Sin function
