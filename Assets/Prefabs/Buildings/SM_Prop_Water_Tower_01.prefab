@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 120007853572452183}
   m_Layer: 0
   m_Name: SM_Prop_Water_Tower_01
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -741,7 +741,7 @@ Light:
   m_Shape: 0
   m_Color: {r: 1, g: 0.54428774, b: 0.033018887, a: 1}
   m_Intensity: 1
-  m_Range: 10
+  m_Range: 26.5
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10

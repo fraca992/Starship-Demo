@@ -102,7 +102,7 @@ public class CollisionHandler : MonoBehaviour
         if (!secondaryAudioSource.isPlaying) secondaryAudioSource.PlayOneShot(successAudioClip);
         successParticles.Play();
         int nextLvlIndex = SceneManager.GetActiveScene().buildIndex + 1;
-        if (nextLvlIndex >= SceneManager.sceneCountInBuildSettings) nextLvlIndex = 0;
+        if (nextLvlIndex >= SceneManager.sceneCountInBuildSettings) nextLvlIndex = 1;
         StartCoroutine(LoadLevelUtils.LoadLvlAfterDelay(delay, nextLvlIndex,rocketMovement,rocketFuelManager));
         isTransitioning = false;
     }

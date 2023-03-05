@@ -22,7 +22,7 @@ public class Movement : MonoBehaviour
 
     // State variables
     public bool canMove = true;
-    private bool hasMoved = false;
+    public bool hasMoved = false;
     private IEnumerator fuelDrainCR;
     #endregion
 
@@ -151,7 +151,7 @@ public class Movement : MonoBehaviour
     IEnumerator FuelDrain()
     {
         while(true)
-          {
+        {
             yield return new WaitForSeconds(1f);
             rocketFuelManager.ChangeFuelLevel(0);
         }
